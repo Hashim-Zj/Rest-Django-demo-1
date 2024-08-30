@@ -24,4 +24,7 @@ urlpatterns = [
     path('fact', views.Factorial.as_view()),
     path('studlist', views.StudentListView.as_view()),
     path('studcreate', views.StudentCreateView.as_view()),
+    path('studentdetail/<int:id>', views.StudentDetailView.as_view()),
+    path('empview', views.EmployeeView.as_view()),
+    path('empdetail/<int:id>', views.EmployeeDetailView.as_view()),
 ]
