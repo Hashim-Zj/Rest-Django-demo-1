@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from app1.models import Student,Employee
-from .serializers import StudetnSerializer,EmployeeSerializer
+from app1.models import Student,Employee,Contact
+from .serializers import StudetnSerializer,EmployeeSerializer,StudentModelSerializer,ContactModelSerializer
+from rest_framework.viewsets import ModelViewSet,ViewSet
+from rest_framework import status
 
 
 # Create your views here.
@@ -102,7 +104,7 @@ class EmployeeDetailView(APIView):
     emp.salary=salary
     emp.designation=designation
     emp.save()
-    return Response({"msg":f"Employee {emp.id} Updated"})
+    return Response({"msg":f"Employee {kwargs.get("id")} Updated"})
   
   def delete(self,request,*args,**kwargs):
     emp=Employee.objects.get(id=kwargs.get("id"))
@@ -110,4 +112,49 @@ class EmployeeDetailView(APIView):
     return Response({"msg":f"Employee '{emp.emp_name}' Deleted"})
   
 
-  
+
+
+class StudentModelViewset(ModelViewSet):
+  serializer_class=StudentModelSerializer
+  queryset=Student.objects.all()
+
+
+class ContactListView(ViewSet):
+  def list(self,request):
+    contact=Contact.objects.all()
+    serializer=ContactModelSerializer(contact,many=True)
+    return Response(data=serializer.data)
+  def create(self,request):
+    serializer=ContactModelSerializer(data=request.data)
+    print(serializer)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(data=serializer.data)
+    else:
+      return Response(data=serializer.errors,status=status.HTTP_404_NOT_FOUND)
+  def retrieve(self,request,*args,**kwargs):
+    try:
+      contact=Contact.objects.get(id=kwargs.get('pk'))
+      serializer=ContactModelSerializer(contact)
+      return Response(data=serializer.data)
+    except:
+      return Response({'msg':'Contact Not Found'})
+
+  def update(self,request,*args,**kwargs):
+    contact=Contact.objects.get(id=kwargs.get('pk'))
+    serializer=ContactModelSerializer(data=request.data,instance=contact)
+    print(serializer)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(data=serializer.data)
+
+
+  def delete(self,request,*args,**kwargs):
+    try:
+      contact=Contact.objects.get(id=kwargs.get('pk'))
+      contact.delete()
+      return Response({'msg':'Contact deleted'})
+    except:
+      return Response({'msg':'Contact NOt Found'})
+
+

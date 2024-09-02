@@ -14,17 +14,24 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 from app1 import views
+from rest_framework.routers import DefaultRouter
+
+router=DefaultRouter()
+router.register("modelView",views.StudentModelViewset,basename="studentmodel_view")
+router.register("contactSet",views.ContactListView,basename="contact_view")
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('home', views.Home.as_view()),
-    path('fact', views.Factorial.as_view()),
-    path('studlist', views.StudentListView.as_view()),
-    path('studcreate', views.StudentCreateView.as_view()),
-    path('studentdetail/<int:id>', views.StudentDetailView.as_view()),
-    path('empview', views.EmployeeView.as_view()),
-    path('empdetail/<int:id>', views.EmployeeDetailView.as_view()),
-]
+    path("admin/", admin.site.urls),
+    path("home", views.Home.as_view()),
+    path("fact", views.Factorial.as_view()),
+    path("studlist", views.StudentListView.as_view()),
+    path("studcreate", views.StudentCreateView.as_view()),
+    path("studentdetail/<int:id>", views.StudentDetailView.as_view()),
+    path("empview", views.EmployeeView.as_view()),
+    path("empdetail/<int:id>", views.EmployeeDetailView.as_view()),
+    # path('',include(router.urls)),
+]+router.urls

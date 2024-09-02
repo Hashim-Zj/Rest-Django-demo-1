@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from .models import Student,Contact
+
 
 
 class StudetnSerializer(serializers.Serializer):
@@ -16,4 +18,15 @@ class EmployeeSerializer(serializers.Serializer):
   salary=serializers.IntegerField()
   designation=serializers.CharField(max_length=50)
 
-  
+class StudentModelSerializer(serializers.ModelSerializer):
+  class Meta:
+    model=Student
+    fields="__all__"
+
+
+class ContactModelSerializer(serializers.ModelSerializer):
+  class Meta:
+    model=Contact
+    fields="__all__"
+
+    
