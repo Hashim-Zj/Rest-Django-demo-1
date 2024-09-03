@@ -16,13 +16,13 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 from app1 import views
 from rest_framework.routers import DefaultRouter
 
-router=DefaultRouter()
-router.register("modelView",views.StudentModelViewset,basename="studentmodel_view")
-router.register("contactSet",views.ContactListView,basename="contact_view")
+router = DefaultRouter()
+router.register("modelView", views.StudentModelViewset, basename="studentmodel_view")
+router.register("contactSet", views.ContactListView, basename="contact_view")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -34,4 +34,6 @@ urlpatterns = [
     path("empview", views.EmployeeView.as_view()),
     path("empdetail/<int:id>", views.EmployeeDetailView.as_view()),
     # path('',include(router.urls)),
-]+router.urls
+    path("", include("BlogApp.urls")),
+] + router.urls
+

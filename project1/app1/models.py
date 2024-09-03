@@ -20,4 +20,4 @@ class Contact(models.Model):
   email=models.EmailField()
   phone=models.IntegerField()
 
-  
+
