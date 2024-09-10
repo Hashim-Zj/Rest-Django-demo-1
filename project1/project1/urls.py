@@ -35,5 +35,6 @@ urlpatterns = [
     path("empdetail/<int:id>", views.EmployeeDetailView.as_view()),
     # path('',include(router.urls)),
     path("", include("BlogApp.urls")),
+    path("", include("socialmedia.urls")),
 ] + router.urls
 

@@ -5,6 +5,7 @@ from app1.models import Student,Employee,Contact
 from .serializers import StudetnSerializer,EmployeeSerializer,StudentModelSerializer,ContactModelSerializer
 from rest_framework.viewsets import ModelViewSet,ViewSet
 from rest_framework import status
+from rest_framework import authentication, permissions
 
 
 # Create your views here.
@@ -120,6 +121,8 @@ class StudentModelViewset(ModelViewSet):
 
 
 class ContactListView(ViewSet):
+  authentication_classes=[authentication.BasicAuthentication]
+  permission_classes=[permissions.IsAuthenticated]
   def list(self,request):
     contact=Contact.objects.all()
     serializer=ContactModelSerializer(contact,many=True)
