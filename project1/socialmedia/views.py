@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ViewSet,ModelViewSet
-from .seraializers import UserRegisterSerializer,UserProfileSerializer,PostSerializer
+from .seraializers import UserRegisterSerializer,UserProfileSerializer,PostSerializer,CommentSerializer
 from django.contrib.auth.models import User
-from .models import UserProfileModel,PostModel
+from .models import UserProfileModel,PostModel,CommentsModel
 from rest_framework.response import Response
 from rest_framework import authentication,permissions
 from rest_framework.decorators import action
@@ -19,7 +19,7 @@ class UserRegisterView(ViewSet):
     else:
       return Response(data=serializer.errors)
 
-class UserProfileView(ViewSet):
+class UserProfileView(ModelViewSet):
   authentication_classes=[authentication.TokenAuthentication]
   permission_classes=[permissions.IsAuthenticated]
 
@@ -61,4 +61,14 @@ class PostView(ModelViewSet):
     post_to_like=PostModel.objects.get(id=id)
     post_to_like.likes.add(request.user)
     return Response({'msg':'post liked'})
+
+  @action(methods=['POST'],detail=True)
+  def add_comments(self,request,*args,**kwargs):
+    post=PostModel.objects.get(id=kwargs.get('pk'))
+    user=request.user
+    comment=CommentSerializer(data=request.data,context={'user':user,'post':post})
+    if comment.is_valid():
+      comment.save()
+      return Response(data=comment.data)
+    
     
