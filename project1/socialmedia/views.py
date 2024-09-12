@@ -71,4 +71,9 @@ class PostView(ModelViewSet):
       comment.save()
       return Response(data=comment.data)
     
-    
+  @action(methods=['GET'],detail=True)
+  def list_commetns(self,request,*args,**kwargs):
+    post=PostModel.objects.get(id=kwargs.get('pk'))
+    commets=CommentsModel.objects.filter(post=post)
+    serializer=CommentSerializer(commets,many=True)
+    return Response(data=serializer.data)
